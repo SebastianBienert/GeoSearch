@@ -1,109 +1,121 @@
 <style>
   .my-drop-zone { border: dotted 3px lightgray; }
-  .nv-file-over { border: dotted 3px red; } /* Default class applied to drop zones on over */
-  .another-file-over-class { border: dotted 3px green; }
-
+  .nv-file-over { border: dotted 3px blue; } 
   html, body { height: 100%; }
+  .error{
+    width: 100%;
+    margin-top: .25rem;
+    font-size: 80%;
+    color: #dc3545;
+  }
+  .my-drop-zone{
+      height: 100%;
+      color: darkgrey;
+  }
+  i{
+      font-size: 20px;
+  }
+  .progress{
+    width: 100%;
+  }
 </style>
 
 <div class="container">
-  <form [formGroup]="geoDataForm" >
+  <form [formGroup]="geoDataForm" novalidate>
     <div class="form-group">
-        <div class="row">
-            <label>Center of radius</label>
-        </div>
-      <div class="row">
-        <div class="col-md-3">
-            <input type="text" placeholder="Longitude" formControlName="centerLongitude" required>
-            <div *ngIf="centerLongitude.invalid && (centerLongitude.dirty || centerLongitude.touched)" class="text-danger">
-                <div *ngIf="centerLongitude.errors.required">
+      <div class="form-row input-group py-1 pl-1">
+            <div class="input-group-prepend">
+                <span class="input-group-text">Center of radius</span>
+            </div>
+            <input class="form-control" type="text" placeholder="Longitude" formControlName="centerLongitude" id="centerLongitude" required>
+            <input class="form-control" placeholder="Latitude" type="text" formControlName="centerLatitude" required>
+            <div *ngIf="centerLongitude.invalid && (centerLongitude.dirty || centerLongitude.touched)" class="error">
+                <small *ngIf="centerLongitude.errors.required">
                     Center longitude is required.
-                </div>
-                <div *ngIf="centerLongitude.errors.min || centerLongitude.errors.max">
+                </small>
+                <small *ngIf="centerLongitude.errors.min || centerLongitude.errors.max">
                     Longitude has to be in range of [-180; 180].
-                </div>
-                <div *ngIf="centerLongitude.errors.pattern">
+                </small>
+                <small *ngIf="centerLongitude.errors.pattern">
                     Longitude has to be numeric.
-                </div>
+                </small>
             </div>
-        </div> 
-        <div class="col-md-3">
-            <input placeholder="Latitude" type="text" formControlName="centerLatitude" required>
-            <div *ngIf="centerLatitude.invalid && (centerLatitude.dirty || centerLatitude.touched)" class="text-danger">
-                <div *ngIf="centerLatitude.errors.required">
-                    Center longitude is required.
-                </div>
-                <div *ngIf="centerLatitude.errors.min || centerLatitude.errors.max">
-                    Longitude has to be in range of [-90; 90].
-                </div>
-                <div *ngIf="centerLatitude.errors.pattern">
-                    Longitude has to be numeric.
-                </div>
+            <div *ngIf="centerLatitude.invalid && (centerLatitude.dirty || centerLatitude.touched)" class="error">
+                <small *ngIf="centerLatitude.errors.required">
+                    Center latitude is required.
+                </small>
+                <small *ngIf="centerLatitude.errors.min || centerLatitude.errors.max">
+                    Latitude has to be in range of [-90; 90].
+                </small>
+                <small *ngIf="centerLatitude.errors.pattern">
+                    Latitude has to be numeric.
+                </small>
             </div>
-        </div>
       </div>
-      <div class="row">
-        <label>Border of radius</label>
-      </div>
-      <div class="row">
-        <div class="col-md-3">
-            <input placeholder="Longitude" type="text" formControlName="borderLongitude" required>
-            <div *ngIf="borderLongitude.invalid && (borderLongitude.dirty || borderLongitude.touched)" class="text-danger">
-                <div *ngIf="borderLongitude.errors.required">
+
+      <div class="form-row input-group py-1 pl-1">
+            <div class="input-group-prepend">
+                <span class="input-group-text">Border of radius</span>
+            </div>
+
+            <input class="form-control" placeholder="Longitude" type="text" formControlName="borderLongitude" required>
+            <input class="form-control" placeholder="Latitude" type="text" formControlName="borderLatitude" required>
+
+            <div *ngIf="borderLongitude.invalid && (borderLongitude.dirty || borderLongitude.touched)" class="error">
+                <small *ngIf="borderLongitude.errors.required">
                     Center longitude is required.
-                </div>
-                <div *ngIf="borderLongitude.errors.min || borderLongitude.errors.max">
+                </small>
+                <small *ngIf="borderLongitude.errors.min || borderLongitude.errors.max">
                     Longitude has to be in range of [-180; 180].
-                </div>
-                <div *ngIf="borderLongitude.errors.pattern">
+                </small>
+                <small *ngIf="borderLongitude.errors.pattern">
                     Longitude has to be numeric.
-                </div>
+                </small>
+            </div>
+            <div *ngIf="borderLatitude.invalid && (borderLatitude.dirty || borderLatitude.touched)" class="error">
+                <small *ngIf="borderLatitude.errors.required">
+                    Center latitude is required.
+                </small>
+                <small *ngIf="borderLatitude.errors.min || borderLatitude.errors.max">
+                    Latitude has to be in range of [-90; 90].
+                </small>
+                <small *ngIf="borderLatitude.errors.pattern">
+                    Latitude has to be numeric.
+                </small>
+            </div>
+      </div>
+      
+      <div class="form-row p-1">
+        <div class="col input-group px-0">
+            <div class="input-group-prepend">
+                <span class="input-group-text">Locations</span>
+            </div>
+            <div class="custom-file">
+                <input class="custom-file-input" type="file" ng2FileSelect [uploader]="uploader" id="inputGroupFile01"/>
+                <label class="custom-file-label" for="inputGroupFile01">{{uploader.queue.length > 0 ? uploader.queue[0].file?.name : 'Choose file'}}</label>
             </div>
         </div>
-        <div class="col-md-3">
-            <input placeholder="Latitude" type="text" formControlName="borderLatitude" required>
-            <div *ngIf="borderLatitude.invalid && (borderLatitude.dirty || borderLatitude.touched)" class="text-danger">
-                <div *ngIf="borderLatitude.errors.required">
-                    Center longitude is required.
-                </div>
-                <div *ngIf="borderLatitude.errors.min || borderLatitude.errors.max">
-                    Longitude has to be in range of [-90; 90].
-                </div>
-                <div *ngIf="borderLatitude.errors.pattern">
-                    Longitude has to be numeric.
-                </div>
-            </div>
-        </div>
-      </div>
-      <div class="row">
-        <label>Locations</label>
-      </div>
-      <div class="row">
-        <div class="col-md-3">
+        <div class="col">
             <div ng2FileDrop
                 [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
                 (fileOver)="fileOverBase($event)"
                 [uploader]="uploader"
-                class="well my-drop-zone">
-                Drop file
+                class="well my-drop-zone text-center align-middle">
+                    <i class="bi bi-cloud-arrow-up px-2"></i>Drop file
             </div>
         </div>
-        <div class="col-md-9">
-            <input type="file" ng2FileSelect [uploader]="uploader" />
+      </div>
+      <div *ngIf="uploader.queue.length > 0" class="form-row p-1">
+        <div class="progress mr-1">
+            <div [ngClass]="{'progress-bar-animated': uploader.queue[0].progress < 100}" class="progress-bar progress-bar-striped" role="progressbar" [ngStyle]="{ 'width': uploader.queue[0].progress + '%' }">
+                {{(uploader.queue.length > 0 ? uploader.queue[0].progress : 0) + '%'}}
+            </div>
         </div>
       </div>
-      <div class="row">
-        <div class="text-center">Apploading progress {{ (uploader.queue.length > 0 ? uploader.queue[0].progress : 0) + '%' }}</div>
-      </div>
-      <div class="row">
-        <div *ngIf="uploader.queue.length > 0" class="progress" style="width: 100%">
-            <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader.queue[0].progress + '%' }"></div>
-        </div>
-      </div>
-      <div class="row">
+      <div class="form-row p-1 justify-content-md-center">
         <button
             type="button" 
-            class="btn btn-success btn-xs"
+            class="btn btn-primary btn-xs mx-2"
             (click)="upload(uploader.queue[0])" 
             [disabled]="!geoDataForm.valid || uploader.queue.length == 0 || uploader.queue[0].isReady || uploader.queue[0].isUploading || uploader.queue[0].isSuccess"
         >
@@ -111,38 +123,37 @@
         </button>
         <button
             type="button" 
-            class="btn btn-warning btn-xs"
+            class="btn btn-warning btn-xs mx-2"
             (click)="upload(uploader.queue[0])" 
             [disabled]="uploader.queue.length == 0 || !uploader.queue[0].isUploading"
         >
             Cancel
         </button>
       </div>
-      <div class="row">
+      <div class="form-row p-1 alert alert-light">
         Number of locations in the radius: {{countResult}}
       </div>
 </div>
   </form>
   
-  <div *ngIf="uploader.queue.length > 0" class="row">
-
-      <div class="col-md-9" style="margin-bottom: 40px">
+  <div *ngIf="uploader.queue.length > 0" class="form-row">
+      <div class="col">
           <table class="table">
               <thead>
               <tr>
                   <th width="50%">Name</th>
                   <th *ngIf="uploader.isHTML5">Size</th>
-                  <th>Status</th>
+                  <th >Status</th>
               </tr>
               </thead>
               <tbody>
               <tr *ngFor="let item of uploader.queue">
-                  <td><strong>{{ item?.file?.name }}</strong></td>
+                  <td>{{ item?.file?.name }}</td>
                   <td *ngIf="uploader.isHTML5" nowrap>{{ item?.file?.size/1024/1024 | number:'.2' }} MB</td>
-                  <td class="text-center">
-                      <span *ngIf="item.isSuccess"><i class="glyphicon glyphicon-ok"></i>FINISHED</span>
-                      <span *ngIf="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i>CANCELED</span>
-                      <span *ngIf="item.isError"><i class="glyphicon glyphicon-remove"></i>ERROR</span>
+                  <td>
+                      <span class="text-success" *ngIf="item.isSuccess"><i class="bi bi-check mx-2"></i>FINISHED</span>
+                      <span class="text-warning" *ngIf="item.isCancel"><i class="bi bi-stop mx-2"></i>CANCELED</span>
+                      <span class="text-danger" *ngIf="item.isError"><i class="bi bi-exclamation-circle mx-2"></i>ERROR</span>
                   </td>
               </tr>
               </tbody>

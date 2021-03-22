@@ -31,10 +31,10 @@ export class FetchDataComponent {
 
   ngOnInit(){
     this.geoDataForm = new FormGroup({
-      centerLongitude: new FormControl(null, [Validators.required, Validators.min(-180), Validators.max(180), Validators.pattern(this.numericNumberReg)]),
-      centerLatitude: new FormControl(null, [Validators.required, Validators.min(-90), Validators.max(90), Validators.pattern(this.numericNumberReg)]),
-      borderLongitude: new FormControl(null, [Validators.required, Validators.min(-180), Validators.max(180), Validators.pattern(this.numericNumberReg)]),
-      borderLatitude: new FormControl(null, [Validators.required, Validators.min(-90), Validators.max(90), Validators.pattern(this.numericNumberReg)])
+      centerLongitude: new FormControl(-119, [Validators.required, Validators.min(-180), Validators.max(180), Validators.pattern(this.numericNumberReg)]),
+      centerLatitude: new FormControl(35, [Validators.required, Validators.min(-90), Validators.max(90), Validators.pattern(this.numericNumberReg)]),
+      borderLongitude: new FormControl(-122, [Validators.required, Validators.min(-180), Validators.max(180), Validators.pattern(this.numericNumberReg)]),
+      borderLatitude: new FormControl(40, [Validators.required, Validators.min(-90), Validators.max(90), Validators.pattern(this.numericNumberReg)])
     });
 
     this.signalRService.startConnection()
