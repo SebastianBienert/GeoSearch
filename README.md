@@ -9,8 +9,8 @@
 	docker build . -t geosearch
     docker run -p 8090:80 geosearch
 
-or
+### or
+
 ### Dotnet core cli build & start the application
-
+    dotnet run --project GeoSearch.API/GeoSearch.API.csproj
     
-
