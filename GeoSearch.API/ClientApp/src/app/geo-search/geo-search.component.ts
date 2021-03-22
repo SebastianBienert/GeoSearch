@@ -1,23 +1,22 @@
 import { Component, Inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { FileUploader} from 'ng2-file-upload';
 import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
-import { GeoHubService } from '../geoHub.service';
+import { GeoHubService } from '../geo-hub.service';
 
 @Component({
-  selector: 'app-fetch-data',
-  templateUrl: './fetch-data.component.html'
+  selector: 'geo-search',
+  templateUrl: './geo-search.component.html',
+  styleUrls: ['./geo-search.component.css']
 })
-export class FetchDataComponent {
-  public hasBaseDropZoneOver:boolean = false;
-  public uploader: FileUploader = new FileUploader({url: ''});
-  private hubConnectionId: number;
-  private countResult: number = 0;
-  private geoDataForm: FormGroup;
+export class GeoSearchComponent {
+  public hasBaseDropZoneOver: boolean = false;
+  public uploader: FileUploader;
+  private hubConnectionId: string;
+  public countResult: number = 0;
+  public geoDataForm: FormGroup;
   private numericNumberReg = '^-?[0-9]\\d*(\\.\\d{1,2})?$';
   
-
-  constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string, public signalRService: GeoHubService) {
+  constructor(@Inject('BASE_URL') baseUrl: string, public signalRService: GeoHubService) {
     this.uploader = new FileUploader({url: baseUrl + 'geodata/coordinatesInRange/processFile'});
 
     this.uploader.onBuildItemForm = (fileItem: any, form: any) => {
@@ -39,7 +38,8 @@ export class FetchDataComponent {
 
     this.signalRService.startConnection()
       .then(x => this.signalRService.getConnectionId()
-      .subscribe(id => this.hubConnectionId = id));
+        .subscribe(id => this.hubConnectionId = id)
+      );
 
     this.signalRService.getCoordinatesResult()
       .subscribe(x => this.countResult = x);
@@ -59,6 +59,11 @@ export class FetchDataComponent {
 
   get borderLatitude(): AbstractControl {
     return this.geoDataForm.get('borderLatitude');
+  }
+
+  get currentFileItem(){
+    const queueLength = this.uploader.queue.length;
+    return queueLength == 0 ? null : this.uploader.queue[queueLength - 1];
   }
 
   public upload(item: any){

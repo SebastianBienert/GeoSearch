@@ -1,0 +1,25 @@
+.my-drop-zone { 
+    border: dotted 3px lightgray; 
+}
+.nv-file-over { 
+    border: dotted 3px blue; 
+} 
+html, body { 
+    height: 100%; 
+}
+.error{
+    width: 100%;
+    margin-top: .25rem;
+    font-size: 80%;
+    color: #dc3545;
+}
+.my-drop-zone{
+    height: 100%;
+    color: darkgrey;
+}
+i{
+    font-size: 20px;
+}
+.progress{
+    width: 100%;
+}

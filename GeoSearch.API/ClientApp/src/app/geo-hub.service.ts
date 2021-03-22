@@ -1,6 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
 import * as signalR from "@microsoft/signalr";
-import { from, Observable, Subject } from 'rxjs'
+import { from, Observable, Subject } from 'rxjs';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -10,8 +11,8 @@ export class GeoHubService {
 
   constructor(@Inject('BASE_URL') baseUrl: string) {
     this.hubConnection = new signalR.HubConnectionBuilder()
-    .withUrl(`${baseUrl}geo`)
-    .build();
+      .withUrl(`${baseUrl}geo`)
+      .build();
 
     this.hubConnection.on('GeoCountUpdate', (data) => {
         this.coordinatesResult.next(data);
@@ -29,8 +30,12 @@ export class GeoHubService {
       .catch(err => console.log('Error while starting connection: ' + err))
   }
 
-  public getConnectionId(): Observable<number> {
+  public getConnectionId(): Observable<string> {
     return from(this.hubConnection.invoke('GetConnectionId'))
-  } 
+  }
+  
+  ngOnDestroy(){
+    this.hubConnection.stop();
+  }
 
 }
