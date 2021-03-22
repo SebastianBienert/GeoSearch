@@ -2,6 +2,10 @@
 
 ## How to run app
 
+### Docker registry
+    docker pull fff1234/geosearch:latest
+    docker run -p 8090:80 fff1234/geosearch:latest
+
 ### Clone the project
 	git clone https://github.com/SebastianBienert/GeoSearch.git
 

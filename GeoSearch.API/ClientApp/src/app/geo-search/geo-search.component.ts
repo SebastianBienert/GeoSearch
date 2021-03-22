@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { FileUploader} from 'ng2-file-upload';
+import { FileUploader, FileItem} from 'ng2-file-upload';
 import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { GeoHubService } from '../geo-hub.service';
 
@@ -26,9 +26,14 @@ export class GeoSearchComponent {
       form.append('borderLatitude' , this.geoDataForm.get('borderLatitude').value || '');
       form.append('hubConnectionId' , this.hubConnectionId);
     };
+
+    this.uploader.onSuccessItem = (item: FileItem, response: string) => {
+      item.headers.result = Number(response);
+    };
   }
 
   ngOnInit(){
+    ($('[data-toggle="popover"]') as any).popover();
     this.geoDataForm = new FormGroup({
       centerLongitude: new FormControl(-119, [Validators.required, Validators.min(-180), Validators.max(180), Validators.pattern(this.numericNumberReg)]),
       centerLatitude: new FormControl(35, [Validators.required, Validators.min(-90), Validators.max(90), Validators.pattern(this.numericNumberReg)]),
@@ -67,7 +72,12 @@ export class GeoSearchComponent {
   }
 
   public upload(item: any){
+    this.countResult = 0;
     item.upload();
+  }
+
+  public cancel(item: any){
+    item.cancel();
   }
 
   public fileOverBase(e:any):void {

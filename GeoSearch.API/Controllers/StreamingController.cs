@@ -53,7 +53,7 @@ namespace GeoSearch.API.Controllers
             var boundary = MultipartRequestHelper.GetBoundary(MediaTypeHeaderValue.Parse(Request.ContentType), _defaultFormOptions.MultipartBoundaryLengthLimit);
             var reader = new MultipartReader(boundary, HttpContext.Request.Body);
             var section = await reader.ReadNextSectionAsync();
-
+            var result = 0;
             while (section != null)
             {
                 var hasContentDispositionHeader = ContentDispositionHeaderValue.TryParse(section.ContentDisposition, out var contentDisposition);
@@ -80,12 +80,13 @@ namespace GeoSearch.API.Controllers
                         {
                             _geoHub.Clients.Client(radiusArea.HubConnectionId).GeoCountUpdate(numberOfCoordsInRange, 0);
                             _logger.LogInformation($"Coords in range: {numberOfCoordsInRange}");
+                            result = numberOfCoordsInRange;
                         }
                     }
                 }
                 section = await reader.ReadNextSectionAsync();
             }
-            return Created(nameof(StreamingController), null);
+            return Ok(result);
         }
         
     }

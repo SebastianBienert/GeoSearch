@@ -20,6 +20,13 @@ html, body {
 i{
     font-size: 20px;
 }
+.bi-info-circle{
+    font-size: 16px;
+    cursor: pointer;
+}
 .progress{
     width: 100%;
+}
+.worldmap{
+    width: 30%;
 }
