@@ -87,7 +87,7 @@ namespace GeoSearch.API.Controllers
                         await foreach(var numberOfCoordsInRange in _fileProcessor.ProcessStreamedFile(section.Body, radiusArea))
                         {
                             _geoHub.Clients.Client(radiusArea.HubConnectionId).GeoCountUpdate(numberOfCoordsInRange, 0);
-                            _logger.LogInformation($"Coords in range: {numberOfCoordsInRange}");
+                            _logger.LogDebug($"Coords in range: {numberOfCoordsInRange}");
                             result = numberOfCoordsInRange;
                         }
                     }
