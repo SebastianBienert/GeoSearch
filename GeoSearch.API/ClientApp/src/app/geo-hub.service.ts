@@ -7,7 +7,7 @@ import { from, Observable, Subject } from 'rxjs';
 })
 export class GeoHubService {
   private hubConnection: signalR.HubConnection;
-  private coordinatesResult: Subject<number> = new Subject<number>();
+  private coordinatesResult$: Subject<number> = new Subject<number>();
 
   constructor(@Inject('BASE_URL') baseUrl: string) {
     this.hubConnection = new signalR.HubConnectionBuilder()
@@ -15,15 +15,15 @@ export class GeoHubService {
       .build();
 
     this.hubConnection.on('GeoCountUpdate', (data) => {
-        this.coordinatesResult.next(data);
+        this.coordinatesResult$.next(data);
     });
   }
 
   public getCoordinatesResult(): Observable<number>{
-    return this.coordinatesResult.asObservable();
+    return this.coordinatesResult$.asObservable();
   }
 
-  public startConnection = () => {
+  public startConnection(): Promise<void> {
     return this.hubConnection
       .start()
       .then(() => console.log('Connection started'))
