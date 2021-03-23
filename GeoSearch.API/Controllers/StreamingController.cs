@@ -66,14 +66,22 @@ namespace GeoSearch.API.Controllers
                     }
                     else if (MultipartRequestHelper.HasFileContentDisposition(contentDisposition))
                     {
-                        var radiusArea = new RadiusAreaGeoCoordinates();
+                        var radiusArea = new RadiusAreaGeoCoordinatesDTO();
                         var formValueProvider = new FormValueProvider(BindingSource.Form, new FormCollection(formAccumulator.GetResults()), CultureInfo.CurrentCulture);
                         var bindingSuccessful = await TryUpdateModelAsync(radiusArea, prefix: "", valueProvider: formValueProvider);
+
+                        if(!bindingSuccessful)
+                        {
+                            ModelState.AddModelError("File", "Values of geo coordinates are incorrect");
+                            _logger.LogError("Values of geo coordinates are incorrect");
+                            return BadRequest(ModelState);
+                        }
 
                         if(FileHelpers.IsValidFileExtension(contentDisposition.FileName.Value, section.Body, _permittedExtensions))
                         {
                             ModelState.AddModelError("File", "This file extension is not permitted.");
                             _logger.LogError("This file extension is not permitted.");
+                            return BadRequest(ModelState);
                         }
 
                         await foreach(var numberOfCoordsInRange in _fileProcessor.ProcessStreamedFile(section.Body, radiusArea))

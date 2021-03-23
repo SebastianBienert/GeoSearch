@@ -15,7 +15,7 @@ namespace GeoSearch.UnitTests
         [Fact]
         public async Task GivenGeoCoordinatesShouldCountCorrectNumberOfCoordinatesInRangeAsync()
         {
-            var coordinatesInRange = new RadiusAreaGeoCoordinates()
+            var coordinatesInRange = new RadiusAreaGeoCoordinatesDTO()
             {
                 BorderLatitude = 55,
                 BorderLongitude = 55,

@@ -11,7 +11,7 @@ namespace GeoSearch.API
     public class FileProcessor
     {
         private readonly int BATCH_SIZE = 10000;
-        public async IAsyncEnumerable<int> ProcessStreamedFile(Stream fileStream, RadiusAreaGeoCoordinates dto)
+        public async IAsyncEnumerable<int> ProcessStreamedFile(Stream fileStream, RadiusAreaGeoCoordinatesDTO dto)
         {
             var center = new GeoCoordinate(dto.CenterLatitude, dto.CenterLongitude);
             var radius = center.GetDistanceTo(new GeoCoordinate(dto.BorderLatitude, dto.BorderLongitude));
